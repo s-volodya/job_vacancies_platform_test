@@ -18,8 +18,9 @@ class CreateVacanciesTable extends Migration
             $table->unsignedBigInteger('creator_id');
             $table->foreign('creator_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('title');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->index(['title']);
+            $table->bigInteger('likes')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

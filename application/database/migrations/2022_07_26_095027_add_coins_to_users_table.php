@@ -14,7 +14,13 @@ class AddCoinsToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('coins')->after('remember_token')->default(5);
+            if (!Schema::hasColumn('users', 'coins')) {
+                $table->integer('coins')->after('remember_token')->default(5);
+            }
+
+            if (!Schema::hasColumn('users', 'likes')) {
+                $table->bigInteger('likes')->after('coins')->default(0);
+            }
         });
     }
 
@@ -26,7 +32,13 @@ class AddCoinsToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('coins');
+            if (Schema::hasColumn('users', 'coins')) {
+                $table->dropColumn('coins');
+            }
+
+            if (Schema::hasColumn('users', 'likes')) {
+                $table->dropColumn('likes');
+            }
         });
     }
 }

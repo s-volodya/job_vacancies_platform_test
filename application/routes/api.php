@@ -1,6 +1,13 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ {
+    AuthController,
+    VacancyController,
+    ResponseController,
+    UserLikeController,
+    VacancyLikeController
+};
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,9 +22,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['middleware' => 'api'], function($router) {
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::post('/profile', [AuthController::class, 'profile']);
+    Route::controller(AuthController::class)
+        ->group(function () {
+            Route::post('/register', 'register');
+            Route::post('/login', 'login');
+            Route::post('/logout', 'logout');
+            Route::post('/refresh', 'refresh');
+            Route::post('/profile', 'profile');
+        });
+
+    Route::resource('vacancy', VacancyController::class);
+    Route::resource('response', ResponseController::class);
+    Route::resource('user-like', UserLikeController::class);
+    Route::resource('vacacny-like', VacancyLikeController::class);
 });
