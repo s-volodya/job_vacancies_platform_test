@@ -29,6 +29,19 @@ class Vacancy extends Model
 
     public function likes()
     {
-        return $this->hasMany(Like::class);
+        return $this->hasMany(VacancyLike::class);
+    }
+
+    public static function createNew($data)
+    {
+        $creator = User::find($data['creator_id']);
+
+        if ($creator->coins >= 2) {
+            $creator->decrement('coins', 2);
+
+            return self::create($data);
+        }
+
+        return [];
     }
 }

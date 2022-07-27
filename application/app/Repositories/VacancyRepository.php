@@ -4,11 +4,24 @@ namespace App\Repositories;
 
 use App\Interfaces\MainInterface;
 use App\Models\Vacancy;
+use App\Traits\DataSetter;
 
 class VacancyRepository implements MainInterface
 {
+    use DataSetter;
+
     public function getAll()
     {
+        return Vacancy::get();
+    }
+
+    /**
+     * @param $data
+     * @return Vacancy|array
+     */
+    public function store($data)
+    {
+        return Vacancy::createNew($data);
     }
 
     /**
@@ -16,26 +29,18 @@ class VacancyRepository implements MainInterface
      * @param $id
      * @return Vacancy|array
      */
-    public function storeOrUpdate($data, $id = null)
+    public function update($id, $data)
     {
-        $vacancy = is_null($id) ? new Vacancy() : Vacancy::find($id);
-
-        if (isset($data['creator_id'])) {
-            $vacancy->creator_id = $data['creator_id'];
-        }
-
-        if (isset($data['title'])) {
-            $vacancy->title = $data['title'];
-        }
-
-        if (isset($data['description'])) {
-            $vacancy->description = $data['description'];
-        }
+        $vacancy = Vacancy::find($id);
+        $vacancy = $this->setValues($vacancy, $data);
 
         return $vacancy->save() ? $vacancy : [];
     }
 
     public function delete($id)
     {
+        $vacancy = Vacancy::findOrFail($id);
+
+        return $vacancy->delete();
     }
 }

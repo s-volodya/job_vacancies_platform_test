@@ -5,6 +5,7 @@ namespace App\Interfaces;
 interface MainInterface
 {
     public function getAll();
-    public function storeOrUpdate($data, $id = null);
+    public function store($data);
+    public function update($id, $data);
     public function delete($id);
 }

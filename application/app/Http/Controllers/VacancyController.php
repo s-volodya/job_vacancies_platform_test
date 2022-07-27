@@ -60,7 +60,7 @@ class VacancyController extends AppController
         ]);
 
         return response()->json([
-            'data' => $this->repository->storeOrUpdate($data)],
+            'data' => $this->repository->store($data)],
             Response::HTTP_CREATED);
     }
 
